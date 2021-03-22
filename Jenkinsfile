@@ -12,6 +12,8 @@ pipeline {
       steps {
         bat "git status"
         bat "git branch -a"
+        bat "git fetch remotes/origin/${params.BRANCH}"
+        bat "git branch -a"
         bat "git checkout remotes/origin/${params.BRANCH}"
         dotnetBuild()
       }
