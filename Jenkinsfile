@@ -22,7 +22,7 @@ pipeline {
                 ]
               ],
             submoduleCfg: [],
-            userRemoteConfigs: [[url: 'git@github.com:balakine/samples.git']]
+            userRemoteConfigs: [[url: 'git@github.com:balakine/samples.git', refspec: "+refs/heads/${params.BRANCH}:refs/remotes/origin/${params.BRANCH}"]]
         ])
         bat "git status"
         bat "git branch -a"
