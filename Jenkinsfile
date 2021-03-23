@@ -11,12 +11,24 @@ pipeline {
   stages {
     stage ('Build') {
       steps {
-        checkout scm
+        checkout([$class: 'GitSCM',
+            branches: [[name: '*/main']],
+            doGenerateSubmoduleConfigurations: false,
+            extensions: [
+              [
+                $class: 'SparseCheckoutPaths',
+                sparseCheckoutPaths: [
+                  [ $class: 'SparseCheckoutPath', path: 'csharp/unit-testing/' ]]
+                ]
+              ],
+            submoduleCfg: [],
+            userRemoteConfigs: [[url: 'git@github.com:balakine/samples.git']]
+        ])
         bat "git status"
         bat "git branch -a"
-        bat "git fetch --all"
-        bat "git branch -a"
-        bat "git checkout remotes/origin/${params.BRANCH}"
+//        bat "git fetch --all"
+//        bat "git branch -a"
+//        bat "git checkout remotes/origin/${params.BRANCH}"
         dotnetBuild()
       }
       post {
