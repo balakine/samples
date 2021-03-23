@@ -1,5 +1,6 @@
 pipeline {
   agent any
+  options { skipDefaultCheckout() }
   parameters {
     string name: 'BRANCH', defaultValue: 'master', description: 'Which branch do you want to build?'
     booleanParam name: 'PUBLISH', defaultValue: true, description: 'Publish the build?'
@@ -10,6 +11,7 @@ pipeline {
   stages {
     stage ('Build') {
       steps {
+        checkout scm
         bat "git status"
         bat "git branch -a"
         bat "git fetch --all"
