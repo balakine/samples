@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  options { skipDefaultCheckout() }
+//  options { skipDefaultCheckout() }
   parameters {
     string name: 'BRANCH', defaultValue: 'master', description: 'Which branch do you want to build?'
     booleanParam name: 'PUBLISH', defaultValue: true, description: 'Publish the build?'
@@ -11,24 +11,24 @@ pipeline {
   stages {
     stage ('Build') {
       steps {
-        checkout([$class: 'GitSCM',
-            branches: [[name: '*/main']],
-            doGenerateSubmoduleConfigurations: false,
-            extensions: [
-              [
-                $class: 'SparseCheckoutPaths',
-                sparseCheckoutPaths: [
-                  [ $class: 'SparseCheckoutPath', path: 'csharp/unit-testing/' ]]
-                ]
-              ],
-            submoduleCfg: [],
-            userRemoteConfigs: [[url: 'git@github.com:balakine/samples.git', refspec: "+refs/heads/${params.BRANCH}:refs/remotes/origin/${params.BRANCH}"]]
-        ])
+//        checkout([$class: 'GitSCM',
+//            branches: [[name: '*/main']],
+//            doGenerateSubmoduleConfigurations: false,
+//            extensions: [
+//              [
+//                $class: 'SparseCheckoutPaths',
+//                sparseCheckoutPaths: [
+//                  [ $class: 'SparseCheckoutPath', path: 'csharp/unit-testing/' ]]
+//                ]
+//              ],
+//            submoduleCfg: [],
+//            userRemoteConfigs: [[url: 'git@github.com:balakine/samples.git', refspec: "+refs/heads/${params.BRANCH}:refs/remotes/origin/${params.BRANCH}"]]
+//        ])
         bat "git status"
         bat "git branch -a"
-//        bat "git fetch --all"
-//        bat "git branch -a"
-//        bat "git checkout remotes/origin/${params.BRANCH}"
+        bat "git fetch origin ${params.BRANCH}"
+        bat "git branch -a"
+        bat "git checkout remotes/origin/${params.BRANCH}"
         dotnetBuild()
       }
       post {
